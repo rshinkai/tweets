@@ -1,5 +1,10 @@
-@()
+@()(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
-@main("Welcome to Play") {
-  <h1>Welcome to Play!</h1>
+@main(Messages("Home"), None) {
+  <div class="center jumbotron">
+    <div class="text-center">
+      <h1>@Messages("WelcomeMessage")</h1>
+      <a href="#" class="btn btn-lg btn-primary">@Messages("SignUpNow")</a>
+    </div>
+  </div>
 }
