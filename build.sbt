@@ -1,3 +1,6 @@
+import com.typesafe.config.{ Config, ConfigFactory }
+import scala.collection.JavaConverters._
+
 name := """tweets"""
 
 organization := "com.example"
@@ -48,6 +51,19 @@ libraryDependencies ++= Seq(
   "org.flywaydb"           %% "flyway-play"                  % "3.1.0",
   "ch.qos.logback"         % "logback-classic"               % "1.2.3"
 )
+
+lazy val envConfig = settingKey[Config]("env-config")
+
+envConfig := {
+  val env = sys.props.getOrElse("env", "dev")
+  ConfigFactory.parseFile(file("env") / (env + ".conf"))
+}
+
+flywayLocations := envConfig.value.getStringList("flywayLocations").asScala
+flywayDriver := envConfig.value.getString("jdbcDriver")
+flywayUrl := envConfig.value.getString("jdbcUrl")
+flywayUser := envConfig.value.getString("jdbcUserName")
+flywayPassword := envConfig.value.getString("jdbcPassword")
 
 // Adds additional packages into Twirl
 // TwirlKeys.templateImports ++= Seq(...)
