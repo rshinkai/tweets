@@ -1,10 +1,14 @@
-@()(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(currentUserOpt: Option[User])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
-@main(Messages("Home"), None) {
-  <div class="center jumbotron">
-    <div class="text-center">
-      <h1>@Messages("WelcomeMessage")</h1>
-      <a href="@routes.SignUpController.index()" class="btn btn-lg btn-primary">@Messages("SignUpNow")</a>
-    </div>
-  </div>
+@main(Messages("Home"), currentUserOpt) {
+    @if(currentUserOpt.isEmpty) {
+        <div class="center jumbotron">
+            <div class="text-center">
+                <h1>@Messages("WelcomeMessage")</h1>
+                <a href="@routes.SignUpController.index()" class="btn btn-lg btn-primary">@Messages("SignUpNow")</a>
+            </div>
+        </div>
+    } else {
+        @currentUserOpt.get.name
+    }
 }
