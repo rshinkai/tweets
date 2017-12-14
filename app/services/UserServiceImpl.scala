@@ -19,4 +19,12 @@ class UserServiceImpl extends UserService {
   override def findByEmail(email: String)(implicit dBSession: DBSession): Try[Option[User]] = Try {
     User.where('email -> email).apply().headOption
   }
+
+  override def findAll(implicit dBSession: DBSession): Try[List[User]] = Try {
+    User.findAll()
+  }
+
+  override def findById(id: Long)(implicit dBSession: DBSession): Try[Option[User]] = Try {
+    User.findById(id)
+  }
 }
