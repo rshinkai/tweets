@@ -1,14 +1,33 @@
-@(currentUserOpt: Option[User])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@import b3.vertical.fieldConstructor
+
+@(currentUserOpt: Option[User], postForm: Form[String], tweets: SearchResult[Tweet])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 @main(Messages("Home"), currentUserOpt) {
-    @if(currentUserOpt.isEmpty) {
-        <div class="center jumbotron">
-            <div class="text-center">
-                <h1>@Messages("WelcomeMessage")</h1>
-                <a href="@routes.SignUpController.index()" class="btn btn-lg btn-primary">@Messages("SignUpNow")</a>
-            </div>
-        </div>
-    } else {
-        @currentUserOpt.get.name
-    }
+
+@if(currentUserOpt.isEmpty) {
+<div class="center jumbotron">
+    <div class="text-center">
+        <h1>@Messages("WelcomeMessage")</h1>
+        <a href="@routes.SignUpController.index()" class="btn btn-lg btn-primary">@Messages("SignUpNow")</a>
+    </div>
+</div>
+} else {
+<div class="row">
+    @* 投稿用フォーム *@
+    <aside class="col-md-4">
+        @b3.formCSRF(routes.TweetController.post(Pager.default)) {
+        @b3.textarea(postForm("content"), '_label -> "Content", 'placeholder -> "Content")
+        @b3.submit('class -> "btn btn-primary btn-block") {
+                @Messages("Post")
+            }
+        }
+    </aside>
+    <div class="col-xs-8">
+        @if(tweets.items.nonEmpty){
+            @common.tweets(currentUserOpt.get, tweets)
+        }
+    </div>
+</div>
+}
+
 }

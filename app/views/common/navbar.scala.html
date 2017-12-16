@@ -13,7 +13,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 @if(userOpt.isEmpty) {
-                <a class="navbar-brand" href="@routes.HomeController.index()">@Messages("ApplicationName")</a>
+                <a class="navbar-brand" href="@routes.HomeController.index(Pager.default)">@Messages("ApplicationName")</a>
                 } else {
                 <a class="navbar-brand" href="#">@Messages("ApplicationName")</a>
                 }
@@ -24,7 +24,7 @@
                     <li><a href="@routes.SignUpController.index()">@Messages("SignUp")</a></li>
                     <li><a href="@routes.AuthController.index()">@Messages("LogIn")</a></li>
                     } else {
-                    <li><a href="@routes.UsersController.index()">@Messages("Users")</a></li>
+                    <li><a href="@routes.UsersController.index(Pager.default)">@Messages("Users")</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             @userOpt.get.name <span class="caret"></span></a>

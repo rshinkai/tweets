@@ -1,6 +1,7 @@
 package controllers
 
 import jp.t2v.lab.play2.auth.AuthConfig
+import jp.t2v.lab.play2.pager.Pager
 import play.api.mvc.Results._
 import play.api.mvc.{ RequestHeader, Result }
 
@@ -40,13 +41,13 @@ trait AuthConfigSupport extends AuthConfig {
   // ログインに成功した後にリダイレクトする先を返す
   override def loginSucceeded(request: RequestHeader)(implicit context: ExecutionContext): Future[Result] =
     Future.successful(
-      Redirect(routes.HomeController.index())
+      Redirect(routes.HomeController.index(Pager.default))
     )
 
   // ログアウトに成功した後にリダイレクトする先を返す
   override def logoutSucceeded(request: RequestHeader)(implicit context: ExecutionContext): Future[Result] =
     Future.successful {
-      Redirect(routes.HomeController.index())
+      Redirect(routes.HomeController.index(Pager.default))
     }
 
   // 認証に失敗した場合にリダイレクトする先を返す

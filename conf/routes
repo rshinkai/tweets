@@ -4,14 +4,16 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET     /                           controllers.HomeController.index(pager: Pager[Tweet])
 GET     /signup                     controllers.SignUpController.index
 POST    /signup/register            controllers.SignUpController.register
 GET     /auth                       controllers.AuthController.index
 POST    /auth/login                 controllers.AuthController.login
 POST    /auth/logout                controllers.AuthController.logout
-GET     /users                      controllers.UsersController.index
+GET     /users                      controllers.UsersController.index(pager: Pager[User])
 GET     /users/:id                  controllers.UsersController.show(id: Long)
+POST    /posts                      controllers.TweetController.post(pager: Pager[Tweet])
+POST    /posts/:id/delete           controllers.TweetController.delete(id: Long, pager: Pager[Tweet])
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

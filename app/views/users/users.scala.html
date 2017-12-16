@@ -1,7 +1,7 @@
-@(currentUser: User, users: Seq[User])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(currentUser: User, users: SearchResult[User])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 <ul class="media-list">
-    @for(otherUser <- users) {
+    @for(otherUser <- users.items) {
     <li class="media">
         <div class="media-left">
             <img class="media-object img-rounded" src="@common.gravatarUrl(otherUser.email)?s=50&amp;r=g&amp;d=identicon" alt="">
@@ -17,3 +17,13 @@
     </li>
     }
 </ul>
+@pagination(
+    users,
+    routes.UsersController.index,
+    window = 3,
+    firstLabel = Html("First"),
+    previousLabel = Html("Prev"),
+    truncateLabel = Html("..snip.."),
+    nextLabel = Html("Next"),
+    lastLabel = Html("Last")
+)

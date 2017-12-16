@@ -5,6 +5,7 @@ import javax.inject.{ Inject, Singleton }
 
 import com.github.t3hnar.bcrypt._
 import forms.SignUp
+import jp.t2v.lab.play2.pager.Pager
 import models.User
 import play.api.data.Form
 import play.api.data.Forms._
@@ -48,13 +49,13 @@ class SignUpController @Inject()(userService: UserService, val messagesApi: Mess
             .create(user)
             // mapによって成功メッセージを含むFlashスコープを持つリダイレクトレスポンスに変換
             .map { _ =>
-              Redirect(routes.HomeController.index())
+              Redirect(routes.HomeController.index(Pager.default))
                 .flashing("success" -> Messages("SignUpScceeded"))
             }
             .recover {
               case e: Exception =>
                 Logger.error(s"occurred error", e)
-                Redirect(routes.HomeController.index())
+                Redirect(routes.HomeController.index(Pager.default))
                   .flashing("failure" -> Messages("InternalError"))
             }
             .getOrElse(InternalServerError(Messages("InternalError")))
