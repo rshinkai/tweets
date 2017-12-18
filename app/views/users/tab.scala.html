@@ -1,0 +1,16 @@
+@(user: User, tweetsCount: Long, followingsCount: Long, followersCount: Long)(implicit request: RequestHeader)
+
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="@{
+        if(routes.UsersController.show(user.id.get, 1).toString.split("\\?")(0) == request.path) "active" else ""
+    }"><a href="@routes.UsersController.show(user.id.get, 1)">
+    Tweets <span class=" badge">@tweetsCount</span></a></li>
+    <li role="presentation" class="@{
+        if(routes.UsersController.getFollowings(user.id.get, 1).toString.split("\\?")(0) == request.path) "active" else ""
+    }"><a href="@routes.UsersController.getFollowings(user.id.get, 1)">
+    Followings <span class="badge">@followingsCount</span></a></li>
+    <li role="presentation" class="@{
+        if(routes.UsersController.getFollowers(user.id.get, 1).toString.split("\\?")(0) == request.path) "active" else ""
+    }"><a href="@routes.UsersController.getFollowers(user.id.get, 1)">
+    Followers <span class="badge">@followersCount</span></a></li>
+</ul>

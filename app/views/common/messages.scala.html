@@ -1,0 +1,23 @@
+@()(implicit flash: Flash)
+
+@flash.get("success").map { message =>
+    <div class="container">
+        <div class="alert alert-success" role="alert">
+            @message
+        </div>
+    </div>
+}
+@flash.get("warning").map { message =>
+    <div class="container">
+        <div class="alert alert-warning" role="alert">
+            @message
+        </div>
+    </div>
+}
+@flash.get("failure").map { message =>
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+            @message
+        </div>
+    </div>
+}

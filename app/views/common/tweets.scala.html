@@ -1,0 +1,44 @@
+@import b3.vertical.fieldConstructor
+
+@(currentUser: User, tweets: SearchResult[Tweet])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+<ul class="media-list">
+
+    @for(tweet <- tweets.items) {
+    <li class="media">
+        <div class="media-left">
+            <img class="media-object img-rounded" src="@common.gravatarUrl(tweet.user.get.email)?s=50&amp;r=g&amp;d=identicon" alt="">
+        </div>
+        <div class="media-body">
+            <div>
+                <a href="@routes.UsersController.show(tweet.userId, 1)">
+                    @tweet.user.map(_.name).get</a>
+                <span class="text-muted">posted at @tweet.createAt</span>
+            </div>
+            <div>
+                <p>@tweet.content</p>
+            </div>
+            @* 削除用フォーム *@
+            @if(currentUser.id.get == tweet.userId) {
+            <div>
+                @b3.formCSRF(routes.TweetController.delete(tweet.id.get, Pager.default)) {
+                @b3.submit('class -> "btn btn-danger btn-xs") {
+                @Messages("Delete")
+                }
+                }
+            </div>
+            }
+        </div>
+    </li>
+    }
+</ul>
+@pagination(
+tweets,
+routes.HomeController.index,
+window = 3,
+firstLabel = Html("First"),
+previousLabel = Html("Prev"),
+truncateLabel = Html("..snip.."),
+nextLabel = Html("Next"),
+lastLabel = Html("Last")
+)

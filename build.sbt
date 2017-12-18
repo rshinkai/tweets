@@ -1,3 +1,7 @@
+import com.typesafe.config.{ Config, ConfigFactory }
+import scala.collection.JavaConverters._
+import play.sbt.routes.RoutesKeys
+
 name := """tweets"""
 
 organization := "com.example"
@@ -42,15 +46,39 @@ libraryDependencies ++= Seq(
   "org.scalikejdbc"        %% "scalikejdbc-test"             % "2.5.2" % Test,
   "org.skinny-framework"   %% "skinny-orm"                   % "2.3.7",
   "org.scalikejdbc"        %% "scalikejdbc-play-initializer" % "2.5.+",
+  "ch.qos.logback"         % "logback-classic"               % "1.2.3",
   "org.scalikejdbc"        %% "scalikejdbc-jsr310"           % "2.5.2",
   "com.adrianhurt"         %% "play-bootstrap"               % "1.1-P25-B3",
   "mysql"                  % "mysql-connector-java"          % "6.0.6",
-  "org.flywaydb"           %% "flyway-play"                  % "3.1.0",
-  "ch.qos.logback"         % "logback-classic"               % "1.2.3"
+  "com.github.t3hnar" %% "scala-bcrypt" % "3.0",
+  "jp.t2v"                 %% "play2-auth"                   % "0.14.2",
+  "jp.t2v"                 %% "play2-auth-test"              % "0.14.2" % Test,
+  "jp.t2v"                 %% "play2-pager"                  % "0.1.0", // 追加
+  "jp.t2v"                 %% "play2-pager-scalikejdbc"      % "0.1.0", // 追加
+  "org.flywaydb"           %% "flyway-play"                  % "3.1.0"
 )
+
+lazy val envConfig = settingKey[Config]("env-config")
+
+envConfig := {
+  val env = sys.props.getOrElse("env", "dev")
+  ConfigFactory.parseFile(file("env") / (env + ".conf"))
+}
+
+flywayLocations := envConfig.value.getStringList("flywayLocations").asScala
+flywayDriver := envConfig.value.getString("jdbcDriver")
+flywayUrl := envConfig.value.getString("jdbcUrl")
+flywayUser := envConfig.value.getString("jdbcUserName")
+flywayPassword := envConfig.value.getString("jdbcPassword")
 
 // Adds additional packages into Twirl
 // TwirlKeys.templateImports ++= Seq(...)
+TwirlKeys.templateImports ++= Seq("jp.t2v.lab.play2.pager._", "forms._")
 
 // Adds additional packages into conf/routes
 // play.sbt.routes.RoutesKeys.routesImport += "com.example.binders._"
+play.sbt.routes.RoutesKeys.routesImport ++= Seq(
+  "jp.t2v.lab.play2.pager.Pager",
+  "jp.t2v.lab.play2.pager.Bindables._",
+  "models._"
+)

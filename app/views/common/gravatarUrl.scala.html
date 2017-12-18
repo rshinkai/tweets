@@ -1,0 +1,9 @@
+@import java.security.MessageDigest
+@import java.math.BigInteger
+
+@(email: String)
+@{
+val hash = MessageDigest.getInstance("MD5").digest(email.getBytes("UTF-8"))
+val v = new BigInteger(1, hash)
+"https://secure.gravatar.com/avatar/" + v.toString(16)
+}

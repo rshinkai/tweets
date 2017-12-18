@@ -1,0 +1,25 @@
+@(currentUser: User, user: User, userFollows: List[UserFollow], tweets: SearchResult[Tweet], followingsCount: Long, followersCount: Long)(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@main(Messages("User"), Some(currentUser)) {
+<div class="row">
+    <aside class="col-xs-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@user.name</h3>
+            </div>
+            <div class="panel-body">
+                <img class="media-object img-rounded img-responsive" src="@common.gravatarUrl(user.email)?s=500&amp;r=g&amp;d=identicon" alt="">
+                @* 追加する *@
+                @user_follow.follow_button(currentUser, user, userFollows)
+            </div>
+        </div>
+    </aside>
+    <div class="col-xs-8">
+        @views.html.users.tab(user, tweets.totalCount, followingsCount, followersCount)
+        @if(tweets.items.nonEmpty){
+        @common.posts(currentUser, tweets)
+        }
+    </div>
+</div>
+
+}

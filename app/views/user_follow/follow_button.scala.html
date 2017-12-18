@@ -1,0 +1,19 @@
+@import b3.vertical.fieldConstructor
+
+@(currentUser: User, user: User, userFollows: List[UserFollow])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@if(currentUser.id.get != user.id.get) {
+@if(!userFollows.exists(_.followId == user.id.get)) {
+@b3.formCSRF(routes.UserFollowController.follow(user.id.get)) {
+@b3.submit('class -> "btn btn-primary btn-block") {
+@Messages("Follow")
+}
+}
+} else {
+@b3.formCSRF(routes.UserFollowController.unFollow(user.id.get)) {
+@b3.submit('class -> "btn btn-primary btn-block") {
+@Messages("Unfollow")
+}
+}
+}
+}

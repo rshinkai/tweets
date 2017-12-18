@@ -1,0 +1,5 @@
+@(currentUser: User, users: SearchResult[User])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@main(Messages("Users"), Some(currentUser)) {
+    @views.html.users.users(currentUser, users)
+}
