@@ -1,6 +1,6 @@
 @import b3.vertical.fieldConstructor
 
-@(currentUser: User, tweets: SearchResult[Tweet])(implicit messages: Messages, request: RequestHeader)
+@(currentUser: User, tweets: SearchResult[Tweet])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 <ul class="media-list">
 
@@ -11,7 +11,7 @@
         </div>
         <div class="media-body">
             <div>
-                <a href="@routes.UsersController.show(tweet.userId)">
+                <a href="@routes.UsersController.show(tweet.userId, 1)">
                     @tweet.user.map(_.name).get</a>
                 <span class="text-muted">posted at @tweet.createAt</span>
             </div>
@@ -22,9 +22,9 @@
             @if(currentUser.id.get == tweet.userId) {
             <div>
                 @b3.formCSRF(routes.TweetController.delete(tweet.id.get, Pager.default)) {
-                    @b3.submit('class -> "btn btn-danger btn-xs") {
-                        @Messages("Delete")
-                    }
+                @b3.submit('class -> "btn btn-danger btn-xs") {
+                @Messages("Delete")
+                }
                 }
             </div>
             }

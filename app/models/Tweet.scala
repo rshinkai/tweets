@@ -39,9 +39,7 @@ object Tweet extends SkinnyCRUDMapper[Tweet] {
 
   implicit object sortable extends Sortable[Tweet] {
     override def default: (String, OrderType) = ("id", OrderType.Descending)
-
-    override def defaultPageSize: Int = 10
-
-    override def acceptableKeys: Set[String] = Set("id")
+    override def defaultPageSize: Int         = 10
+    override def acceptableKeys: Set[String]  = Set("id")
   }
 }

@@ -1,5 +1,6 @@
 import com.typesafe.config.{ Config, ConfigFactory }
 import scala.collection.JavaConverters._
+import play.sbt.routes.RoutesKeys
 
 name := """tweets"""
 
@@ -45,16 +46,16 @@ libraryDependencies ++= Seq(
   "org.scalikejdbc"        %% "scalikejdbc-test"             % "2.5.2" % Test,
   "org.skinny-framework"   %% "skinny-orm"                   % "2.3.7",
   "org.scalikejdbc"        %% "scalikejdbc-play-initializer" % "2.5.+",
+  "ch.qos.logback"         % "logback-classic"               % "1.2.3",
   "org.scalikejdbc"        %% "scalikejdbc-jsr310"           % "2.5.2",
   "com.adrianhurt"         %% "play-bootstrap"               % "1.1-P25-B3",
   "mysql"                  % "mysql-connector-java"          % "6.0.6",
   "com.github.t3hnar" %% "scala-bcrypt" % "3.0",
-  "org.flywaydb"           %% "flyway-play"                  % "3.1.0",
   "jp.t2v"                 %% "play2-auth"                   % "0.14.2",
   "jp.t2v"                 %% "play2-auth-test"              % "0.14.2" % Test,
   "jp.t2v"                 %% "play2-pager"                  % "0.1.0", // 追加
   "jp.t2v"                 %% "play2-pager-scalikejdbc"      % "0.1.0", // 追加
-  "ch.qos.logback"         % "logback-classic"               % "1.2.3"
+  "org.flywaydb"           %% "flyway-play"                  % "3.1.0"
 )
 
 lazy val envConfig = settingKey[Config]("env-config")
