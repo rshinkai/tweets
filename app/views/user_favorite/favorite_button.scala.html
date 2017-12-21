@@ -1,0 +1,17 @@
+@import b3.vertical.fieldConstructor
+
+@(tweet: Tweet, userFavorites: List[UserFavorite])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+
+@if(!userFavorites.exists(_.tweetId == tweet.id.get)) {
+    @b3.formCSRF(routes.UserFavoriteController.addFavorite(tweet.id.get)) {
+        @b3.submit('class -> "btn btn-primary btn-xs") {
+            <span class="glyphicon glyphicon-heart" aria-hidden="true"></span>
+        }
+    }
+} else {
+    @b3.formCSRF(routes.UserFavoriteController.removeFavorite(tweet.id.get)) {
+        @b3.submit('class -> "btn btn-warning btn-xs") {
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        }
+    }
+}

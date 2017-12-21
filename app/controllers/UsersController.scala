@@ -14,6 +14,7 @@ import services._
 class UsersController @Inject()(val userService: UserService,
                                 val tweetService: TweetService,
                                 val userFollowService: UserFollowService,
+                                val userFavoriteService: UserFavoriteService,
                                 val messagesApi: MessagesApi)
     extends Controller
     with I18nSupport
@@ -43,16 +44,18 @@ class UsersController @Inject()(val userService: UserService,
     val triedMicroPosts     = tweetService.findByUserId(pager, userId)
     val triedFollowingsSize = userFollowService.countByUserId(userId)
     val triedFollowersSize  = userFollowService.countByFollowId(userId)
+    val triedFavorites      = userFavoriteService.findByUserId(userId)
     (for {
       userOpt        <- triedUserOpt
       userFollows    <- triedUserFollows
       microPosts     <- triedMicroPosts
       followingsSize <- triedFollowingsSize
       followersSize  <- triedFollowersSize
+      userFavorites  <- triedFavorites
     } yield {
       userOpt.map { user =>
         Ok(
-          views.html.users.show(loggedIn, user, userFollows, microPosts, followingsSize, followersSize)
+          views.html.users.show(loggedIn, user, userFollows, microPosts, followingsSize, followersSize, userFavorites)
         )
       }.get
     }).recover {

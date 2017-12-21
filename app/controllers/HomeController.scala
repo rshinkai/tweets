@@ -4,17 +4,18 @@ import javax.inject._
 
 import jp.t2v.lab.play2.auth.OptionalAuthElement
 import jp.t2v.lab.play2.pager.{ Pager, SearchResult }
-import models.Tweet
+import models.{ Tweet, UserFavorite }
 import play.api.Logger
 import play.api.data.Forms._
 import play.api.data._
 import play.api.i18n.{ I18nSupport, Messages, MessagesApi }
 import play.api.mvc._
-import services.{ TweetService, UserService }
+import services.{ TweetService, UserFavoriteService, UserService }
 
 @Singleton
 class HomeController @Inject()(val userService: UserService,
                                val tweetService: TweetService,
+                               val userFavoriteService: UserFavoriteService,
                                val messagesApi: MessagesApi)
     extends Controller
     with I18nSupport
@@ -39,7 +40,19 @@ class HomeController @Inject()(val userService: UserService,
         tweetService
           .findAllByWithLimitOffset(pager, user.id.get)
           .map { searchResult =>
-            Ok(views.html.index(userOpt, tweetForm, searchResult))
+            userFavoriteService
+              .findByUserId(user.id.get)
+              .map { userFavorites =>
+                Ok(views.html.index(userOpt, tweetForm, searchResult, userFavorites))
+              }
+              .recover {
+                case e: Exception =>
+                  Logger.error(s"occurred error", e)
+                  Redirect(routes.HomeController.index(Pager.default))
+                    .flashing("failure" -> Messages("InternalError"))
+              }
+              .getOrElse(InternalServerError(Messages("InternalError")))
+
           }
           .recover {
             case e: Exception =>
@@ -49,7 +62,11 @@ class HomeController @Inject()(val userService: UserService,
           }
           .getOrElse(InternalServerError(Messages("InternalError")))
       }
-      .getOrElse(Ok(views.html.index(userOpt, tweetForm, SearchResult(pager, 0)(_ => Seq.empty[Tweet]))))
+      .getOrElse(
+        Ok(
+          views.html.index(userOpt, tweetForm, SearchResult(pager, 0)(_ => Seq.empty[Tweet]), List.empty[UserFavorite])
+        )
+      )
   }
 
 }

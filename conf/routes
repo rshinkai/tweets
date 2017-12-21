@@ -10,6 +10,8 @@ GET         /users/:userId/followers         controllers.UsersController.getFoll
 GET         /users/:userId/followings        controllers.UsersController.getFollowings(userId: Long, page: Int)
 POST        /users/:userId/follow            controllers.UserFollowController.follow(userId: Long)
 POST        /users/:userId/unfollow          controllers.UserFollowController.unFollow(userId: Long)
+POST        /users/:tweetId/favorite         controllers.UserFavoriteController.addFavorite(tweetId: Long)
+POST        /users/:tweetId/unfavorite       controllers.UserFavoriteController.removeFavorite(tweetId: Long)
 POST        /posts                           controllers.TweetController.post(pager: Pager[Tweet])
 POST        /posts/:id/delete                controllers.TweetController.delete(id: Long, pager: Pager[Tweet])
 GET         /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)

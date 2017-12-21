@@ -1,6 +1,6 @@
 @import b3.vertical.fieldConstructor
 
-@(currentUser: User, tweets: SearchResult[Tweet])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(currentUser: User, tweets: SearchResult[Tweet], userFavorites: List[UserFavorite])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 <ul class="media-list">
 
@@ -22,12 +22,14 @@
             @if(currentUser.id.get == tweet.userId) {
             <div>
                 @b3.formCSRF(routes.TweetController.delete(tweet.id.get, Pager.default)) {
-                @b3.submit('class -> "btn btn-danger btn-xs") {
-                @Messages("Delete")
-                }
+                    @b3.submit('class -> "btn btn-danger btn-xs") {
+                        @Messages("Delete")
+                    }
                 }
             </div>
             }
+            @* fav *@
+            @user_favorite.favorite_button(tweet, userFavorites)
         </div>
     </li>
     }

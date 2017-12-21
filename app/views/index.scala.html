@@ -1,6 +1,6 @@
 @import b3.vertical.fieldConstructor
 
-@(currentUserOpt: Option[User], postForm: Form[String], tweets: SearchResult[Tweet])(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(currentUserOpt: Option[User], postForm: Form[String], tweets: SearchResult[Tweet],userFavorites: List[UserFavorite])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 @main(Messages("Home"), currentUserOpt) {
 
@@ -23,8 +23,8 @@
         }
     </aside>
     <div class="col-xs-8">
-        @if(tweets.items.nonEmpty){
-            @common.tweets(currentUserOpt.get, tweets)
+        @if(tweets.items.nonEmpty && userFavorites.nonEmpty){
+            @common.tweets(currentUserOpt.get, tweets, userFavorites)
         }
     </div>
 </div>

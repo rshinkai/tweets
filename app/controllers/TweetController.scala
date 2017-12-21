@@ -17,6 +17,7 @@ import services._
 class TweetController @Inject()(
     val userService: UserService,
     val tweetService: TweetService,
+    val userFavoriteService: UserFavoriteService,
     val messagesApi: MessagesApi
 ) extends Controller
     with I18nSupport
@@ -65,7 +66,8 @@ class TweetController @Inject()(
     tweetService
       .findAllByWithLimitOffset(pager, user.id.get)
       .map { searchResult =>
-        BadRequest(views.html.index(Some(user), formWithErrors, searchResult))
+        val userFavorite = userFavoriteService.findByUserId(user.id.get).get
+        BadRequest(views.html.index(Some(user), formWithErrors, searchResult, userFavorite))
       }
       .recover {
         case e: Exception =>

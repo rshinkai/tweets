@@ -1,4 +1,4 @@
-@(currentUser: User, user: User, userFollows: List[UserFollow], tweets: SearchResult[Tweet], followingsCount: Long, followersCount: Long)(implicit messages: Messages, flash: Flash, request: RequestHeader)
+@(currentUser: User, user: User, userFollows: List[UserFollow], tweets: SearchResult[Tweet], followingsCount: Long, followersCount: Long, userFavorites: List[UserFavorite])(implicit messages: Messages, flash: Flash, request: RequestHeader)
 
 @main(Messages("User"), Some(currentUser)) {
 <div class="row">
@@ -17,7 +17,7 @@
     <div class="col-xs-8">
         @views.html.users.tab(user, tweets.totalCount, followingsCount, followersCount)
         @if(tweets.items.nonEmpty){
-        @common.posts(currentUser, tweets)
+            @common.tweets(currentUser, tweets, userFavorites)
         }
     </div>
 </div>
